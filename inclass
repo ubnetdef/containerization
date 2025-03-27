@@ -1,0 +1,31 @@
+version: '3.8'
+ 
+services:
+  mediawiki:
+    image: mediawiki
+    container_name: mediawiki
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - MEDIAWIKI_DB_HOST=rockydb
+      - MEDIAWIKI_DB_USER=wikiuser
+      - MEDIAWIKI_DB_PASSWORD=wikipass
+      - MEDIAWIKI_DB_NAME=wikidb
+    depends_on:
+      - rockydb
+ 
+  rockydb:
+    image: mariadb:latest 
+    container_name: rockydb
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_DATABASE=wikidb
+      - MYSQL_USER=wikiuser
+      - MYSQL_PASSWORD=wikipass
+    volumes:
+      - rockydb_data:/var/lib/mysql
+ 
+volumes:
+  rockydb_data:
